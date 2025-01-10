@@ -56,9 +56,6 @@ const StarryLayout = () => {
             </div>
           </div>
         </div>
-
-        {/* Empty Hero Section - Keeping for future content */}
-        <div className="min-h-[80vh]"></div>
       </div>
     </div>
   );
