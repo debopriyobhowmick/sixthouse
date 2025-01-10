@@ -22,7 +22,7 @@ const StarryLayout = () => {
 
       {/* Glow effect */}
       <div 
-        className="absolute bottom-0 right-0 w-[1200px] h-[1200px]"
+        className="absolute bottom-0 right-0 w-96 h-96"
         style={{
           background: 'radial-gradient(circle at bottom right, rgba(13, 36, 95, 0.6), transparent 70%)',
           filter: 'blur(80px)',
@@ -34,8 +34,9 @@ const StarryLayout = () => {
         {/* Top Left Header Content */}
         <div className="pt-20 pl-8">
           <div className="inline-flex flex-col">
-            <div className="relative">
-              <p className="text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
+            <div className="relative h-32">
+              {/* Role description */}
+              <p className="text-sm md:text-base tracking-widest font-extralight uppercase whitespace-nowrap absolute bottom-0 left-0"
                  style={{
                    color: 'rgb(191, 219, 254)',
                    textShadow: `
@@ -46,10 +47,12 @@ const StarryLayout = () => {
                  }}>
                 Full Stack Data Scientist
               </p>
-              <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14 left-1/2 -translate-x-1/2 whitespace-nowrap" 
+              {/* DEBO header */}
+              <h1 className="font-['Optima'] text-6xl md:text-7xl lg:text-8xl font-bold text-white absolute top-0 left-0 whitespace-nowrap" 
                   style={{ 
                     fontStretch: 'expanded',
-                    WebkitTextStroke: '0.5px white'
+                    WebkitTextStroke: '0.5px white',
+                    letterSpacing: '1.2em'
                   }}>
                 DEBO
               </h1>
