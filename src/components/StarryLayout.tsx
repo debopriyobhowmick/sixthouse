@@ -30,33 +30,31 @@ const StarryLayout = () => {
       ></div>
 
       {/* Main Content Container */}
-      <div className="relative z-10 container mx-auto px-4">
-        {/* Top Left Header Content */}
-        <div className="pt-20 pl-8">
-          <div className="inline-flex flex-col">
-            <div className="relative h-32">
-              {/* Role description */}
-              <p className="text-sm md:text-base tracking-widest font-extralight uppercase whitespace-nowrap absolute bottom-0 left-0"
-                 style={{
-                   color: 'rgb(191, 219, 254)',
-                   textShadow: `
-                     0 0 5px rgba(0, 24, 82, 0.95),
-                     0 0 8px rgba(0, 24, 82, 0.85),
-                     0 0 12px rgba(13, 36, 95, 0.75)
-                   `
-                 }}>
-                Full Stack Data Scientist
-              </p>
-              {/* DEBO header */}
-              <h1 className="font-['Optima'] text-6xl md:text-7xl lg:text-8xl font-bold text-white absolute top-0 left-0 whitespace-nowrap" 
-                  style={{ 
-                    fontStretch: 'expanded',
-                    WebkitTextStroke: '0.5px white',
-                    letterSpacing: '1.2em'
-                  }}>
-                DEBO
-              </h1>
-            </div>
+      <div className="relative z-10">
+        {/* Header Container - Fixed position in top left */}
+        <div className="fixed top-20 left-8">
+          <div className="relative">
+            {/* DEBO header */}
+            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
+                style={{ 
+                  fontStretch: 'expanded',
+                  WebkitTextStroke: '0.5px white'
+                }}>
+              DEBO
+            </h1>
+            
+            {/* Role description */}
+            <p className="text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
+               style={{
+                 color: 'rgb(191, 219, 254)',
+                 textShadow: `
+                   0 0 5px rgba(0, 24, 82, 0.95),
+                   0 0 8px rgba(0, 24, 82, 0.85),
+                   0 0 12px rgba(13, 36, 95, 0.75)
+                 `
+               }}>
+              Full Stack Data Scientist
+            </p>
           </div>
         </div>
       </div>
