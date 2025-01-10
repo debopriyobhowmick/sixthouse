@@ -11,7 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Updated Node.js version to 20
       - name: Setup Node.js
         uses: actions/setup-node@v2
         with:
@@ -21,7 +20,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build && npm run export
+        run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
