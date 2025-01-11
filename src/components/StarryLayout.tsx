@@ -256,7 +256,7 @@ const StarryLayout = () => {
         <div className="fixed top-20 left-8">
           <div className="relative">
             {/* DEBO header */}
-            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
+            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-20"
                 style={{ 
                   fontStretch: 'expanded',
                   WebkitTextStroke: '0.5px white'
@@ -286,6 +286,21 @@ const StarryLayout = () => {
           50% { opacity: 1; transform: scale(1.2); }
         }
       `}</style>
+
+      {/* Footer Note */}
+      <div className="fixed bottom-1 left-0 right-0 text-center">
+        <p 
+          className="text-[8px] font-['DM_Sans'] text-blue-200/30 tracking-widest"
+          style={{
+            textShadow: `
+              0 0 1px rgba(0, 24, 82, 0.3),
+              0 0 2px rgba(0, 24, 82, 0.2)
+            `
+          }}
+        >
+          Made with ❤️ in New York City
+        </p>
+      </div>
     </div>
   );
 };
