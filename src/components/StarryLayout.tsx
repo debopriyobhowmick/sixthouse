@@ -14,6 +14,29 @@ const StarryLayout = () => {
 
   const blinkingStars = generateStars(25);
   const staticStars = generateStars(15, true);
+  
+  // Orion constellation stars - rotated 30 degrees clockwise
+  const orionStars = [
+    // Primary Stars
+    { id: 'betelgeuse', x: 86, y: 14, name: 'Betelgeuse', primary: true },    // Alpha Orionis
+    { id: 'rigel', x: 89, y: 24, name: 'Rigel', primary: true },              // Beta Orionis
+    { id: 'bellatrix', x: 83, y: 16, name: 'Bellatrix', primary: true },      // Gamma Orionis
+    { id: 'mintaka', x: 88, y: 20, name: 'Mintaka', primary: true },          // Delta Orionis
+    { id: 'alnilam', x: 86, y: 19, name: 'Alnilam', primary: true },          // Epsilon Orionis
+    { id: 'alnitak', x: 84, y: 18, name: 'Alnitak', primary: true },          // Zeta Orionis
+    { id: 'saiph', x: 84, y: 24, name: 'Saiph', primary: true },              // Kappa Orionis
+    { id: 'meissa', x: 85, y: 12, name: 'Meissa', primary: true },            // Lambda Orionis
+    { id: 'tabit', x: 82, y: 17, name: 'Tabit', primary: true },              // Pi3 Orionis
+
+    // Additional Stars
+    { id: 'eta', x: 87, y: 22, name: 'Eta Orionis' },                         // Below belt
+    { id: 'phi', x: 87, y: 17, name: 'Phi Orionis' },                         // Above belt
+    { id: 'omega', x: 85, y: 22, name: 'Omega Orionis' },                     // Below belt
+    { id: 'nu', x: 84, y: 16, name: 'Nu Orionis' },                          // Above belt
+    { id: 'xi', x: 88, y: 16, name: 'Xi Orionis' },                          // Right side
+    { id: 'mu', x: 83, y: 22, name: 'Mu Orionis' },                          // Left side
+    { id: 'chi', x: 86, y: 15, name: 'Chi Orionis' }                         // Upper region
+  ];
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
@@ -45,6 +68,31 @@ const StarryLayout = () => {
 
       {/* Stars Container with higher z-index */}
       <div className="absolute inset-0 z-10">
+        {/* Orion Constellation */}
+        {orionStars.map((star) => (
+          <div
+            key={star.id}
+            className="absolute"
+            style={{
+              top: `${star.y}%`,
+              left: `${star.x}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <div
+              className="rounded-full bg-white"
+              style={{
+                width: star.primary ? '2px' : '1px',
+                height: star.primary ? '2px' : '1px',
+                opacity: star.primary ? 0.65 : 0.4,
+                boxShadow: star.primary 
+                  ? '0 0 1.5px 0.5px rgba(255, 255, 255, 0.4)'
+                  : '0 0 1px 0px rgba(255, 255, 255, 0.3)',
+              }}
+            />
+          </div>
+        ))}
+
         {/* Static stars */}
         {staticStars.map((star) => (
           <div
