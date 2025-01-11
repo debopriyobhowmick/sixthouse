@@ -3,7 +3,7 @@ import { Linkedin, Github } from 'lucide-react';
 
 const StarryLayout = () => {
   // Generate random positions for blinking stars
-  const generateStars = (count, isStatic = false) => {
+  const generateStars = (count: number, isStatic = false) => {
     return Array.from({ length: count }, (_, i) => ({
       id: isStatic ? `static-${i}` : `blinking-${i}`,
       top: `${Math.random() * 100}%`,
