@@ -256,7 +256,7 @@ const StarryLayout = () => {
         <div className="fixed top-20 left-8">
           <div className="relative">
             {/* DEBO header */}
-            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-20"
+            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
                 style={{ 
                   fontStretch: 'expanded',
                   WebkitTextStroke: '0.5px white'
