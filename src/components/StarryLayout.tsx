@@ -3,7 +3,7 @@ import { Linkedin, Github } from 'lucide-react';
 
 const StarryLayout = () => {
   // Generate random positions for blinking stars
-  const generateStars = (count: number, isStatic = false) => {
+  const generateStars = (count, isStatic = false) => {
     return Array.from({ length: count }, (_, i) => ({
       id: isStatic ? `static-${i}` : `blinking-${i}`,
       top: `${Math.random() * 100}%`,
@@ -194,7 +194,7 @@ const StarryLayout = () => {
         <div className="fixed top-8 right-8">
           <div className="flex gap-4 p-4 rounded-xl bg-white/[0.02] backdrop-blur-[2px] border border-white/[0.05]">
             <button 
-              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05]"
+              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05] font-['Optima']"
               style={{
                 textShadow: `
                   0 0 5px rgba(0, 24, 82, 0.95),
@@ -256,7 +256,7 @@ const StarryLayout = () => {
         <div className="fixed top-20 left-8">
           <div className="relative">
             {/* DEBO header */}
-            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
+            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-20"
                 style={{ 
                   fontStretch: 'expanded',
                   WebkitTextStroke: '0.5px white'
@@ -265,7 +265,7 @@ const StarryLayout = () => {
             </h1>
             
             {/* Role description */}
-            <p className="text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
+            <p className="font-['Optima'] text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
                style={{
                  color: 'rgb(191, 219, 254)',
                  textShadow: `
