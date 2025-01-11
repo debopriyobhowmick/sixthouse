@@ -1,4 +1,5 @@
 import React from 'react';
+import { Linkedin, Github } from 'lucide-react';
 
 const StarryLayout = () => {
   // Generate random positions for blinking stars
@@ -63,12 +64,12 @@ const StarryLayout = () => {
           background: `
             radial-gradient(
               circle at bottom right,
-              rgba(16, 24, 79, 1) 0%,
-              rgba(14, 21, 72, 0.98) 8%,
-              rgba(12, 18, 65, 0.95) 16%,
-              rgba(10, 16, 57, 0.85) 28%,
-              rgba(9, 14, 50, 0.7) 40%,
-              rgba(8, 12, 45, 0.4) 52%,
+              rgba(16, 24, 79, 0.95) 0%,
+              rgba(13, 20, 68, 0.9) 8%,
+              rgba(12, 18, 65, 0.8) 16%,
+              rgba(10, 16, 57, 0.6) 28%,
+              rgba(9, 14, 50, 0.4) 40%,
+              rgba(8, 12, 45, 0.2) 52%,
               transparent 65%
             )
           `,
@@ -79,7 +80,7 @@ const StarryLayout = () => {
       <div 
         className="absolute bottom-0 right-0 w-80 h-80"
         style={{
-          background: 'radial-gradient(circle at bottom right, rgba(25, 35, 95, 0.5), transparent 60%)',
+          background: 'radial-gradient(circle at bottom right, rgba(25, 35, 95, 0.3), transparent 60%)',
           filter: 'blur(60px)',
         }}
       ></div>
@@ -224,6 +225,29 @@ const StarryLayout = () => {
               }}
             >
               About
+            </button>
+            <div className="h-6 w-px bg-white/[0.05] my-auto"></div>
+            <button 
+              className="p-2 rounded-lg text-blue-200/80 transition-all hover:bg-white/[0.05]"
+              style={{
+                textShadow: `
+                  0 0 5px rgba(0, 24, 82, 0.95),
+                  0 0 8px rgba(0, 24, 82, 0.85)
+                `
+              }}
+            >
+              <Linkedin size={20} className="opacity-80" />
+            </button>
+            <button 
+              className="p-2 rounded-lg text-blue-200/80 transition-all hover:bg-white/[0.05]"
+              style={{
+                textShadow: `
+                  0 0 5px rgba(0, 24, 82, 0.95),
+                  0 0 8px rgba(0, 24, 82, 0.85)
+                `
+              }}
+            >
+              <Github size={20} className="opacity-80" />
             </button>
           </div>
         </div>
