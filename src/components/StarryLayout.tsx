@@ -38,6 +38,22 @@ const StarryLayout = () => {
     { id: 'chi', x: 86, y: 15, name: 'Chi Orionis' }                         // Upper region
   ];
 
+  // Cancer constellation stars
+  const cancerStars = [
+    // Main Y-shape
+    { id: 'acubens', x: 15, y: 16, primary: true },      // Alpha Cancri
+    { id: 'altarf', x: 13, y: 18, primary: true },       // Beta Cancri
+    { id: 'asellus-borealis', x: 17, y: 20, primary: true }, // Gamma Cancri
+    { id: 'asellus-australis', x: 15, y: 22, primary: true }, // Delta Cancri
+    
+    // Additional cluster stars
+    { id: 'c-iota', x: 14, y: 17 },
+    { id: 'c-chi', x: 16, y: 19 },
+    { id: 'c-theta', x: 18, y: 18 },
+    { id: 'c-eta', x: 12, y: 19 },
+    { id: 'c-gamma', x: 16, y: 21 }
+  ];
+
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
       {/* Main circular gradient */}
@@ -47,11 +63,13 @@ const StarryLayout = () => {
           background: `
             radial-gradient(
               circle at bottom right,
-              rgba(0, 20, 65, 1) 0%,
-              rgba(0, 20, 65, 0.95) 20%,
-              rgba(0, 12, 45, 0.7) 40%,
-              rgba(0, 6, 20, 0.4) 60%,
-              transparent 80%
+              rgba(16, 24, 79, 1) 0%,
+              rgba(14, 21, 72, 0.98) 8%,
+              rgba(12, 18, 65, 0.95) 16%,
+              rgba(10, 16, 57, 0.85) 28%,
+              rgba(9, 14, 50, 0.7) 40%,
+              rgba(8, 12, 45, 0.4) 52%,
+              transparent 65%
             )
           `,
         }}
@@ -59,15 +77,40 @@ const StarryLayout = () => {
 
       {/* Glow effect */}
       <div 
-        className="absolute bottom-0 right-0 w-96 h-96"
+        className="absolute bottom-0 right-0 w-80 h-80"
         style={{
-          background: 'radial-gradient(circle at bottom right, rgba(10, 30, 80, 0.6), transparent 70%)',
-          filter: 'blur(80px)',
+          background: 'radial-gradient(circle at bottom right, rgba(25, 35, 95, 0.5), transparent 60%)',
+          filter: 'blur(60px)',
         }}
       ></div>
 
       {/* Stars Container with higher z-index */}
       <div className="absolute inset-0 z-10">
+        {/* Cancer Constellation */}
+        {cancerStars.map((star) => (
+          <div
+            key={star.id}
+            className="absolute"
+            style={{
+              top: `${star.y}%`,
+              left: `${star.x}%`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            <div
+              className="rounded-full bg-white"
+              style={{
+                width: star.primary ? '2px' : '1px',
+                height: star.primary ? '2px' : '1px',
+                opacity: star.primary ? 0.5 : 0.3,
+                boxShadow: star.primary 
+                  ? '0 0 1.5px 0.5px rgba(255, 255, 255, 0.3)'
+                  : '0 0 1px 0px rgba(255, 255, 255, 0.2)',
+              }}
+            />
+          </div>
+        ))}
+
         {/* Orion Constellation */}
         {orionStars.map((star) => (
           <div
@@ -146,6 +189,45 @@ const StarryLayout = () => {
 
       {/* Main Content Container */}
       <div className="relative z-20">
+        {/* Navigation Bento Box */}
+        <div className="fixed top-8 right-8">
+          <div className="flex gap-4 p-4 rounded-xl bg-white/[0.02] backdrop-blur-[2px] border border-white/[0.05]">
+            <button 
+              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05]"
+              style={{
+                textShadow: `
+                  0 0 5px rgba(0, 24, 82, 0.95),
+                  0 0 8px rgba(0, 24, 82, 0.85)
+                `
+              }}
+            >
+              Projects
+            </button>
+            <button 
+              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05]"
+              style={{
+                textShadow: `
+                  0 0 5px rgba(0, 24, 82, 0.95),
+                  0 0 8px rgba(0, 24, 82, 0.85)
+                `
+              }}
+            >
+              Resume
+            </button>
+            <button 
+              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05]"
+              style={{
+                textShadow: `
+                  0 0 5px rgba(0, 24, 82, 0.95),
+                  0 0 8px rgba(0, 24, 82, 0.85)
+                `
+              }}
+            >
+              About
+            </button>
+          </div>
+        </div>
+
         {/* Header Container - Fixed position in top left */}
         <div className="fixed top-20 left-8">
           <div className="relative">
