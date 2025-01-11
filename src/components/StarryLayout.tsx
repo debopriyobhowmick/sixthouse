@@ -194,7 +194,7 @@ const StarryLayout = () => {
         <div className="fixed top-8 right-8">
           <div className="flex gap-4 p-4 rounded-xl bg-white/[0.02] backdrop-blur-[2px] border border-white/[0.05]">
             <button 
-              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05] font-['Optima']"
+              className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05] font-['Optima'] relative"
               style={{
                 textShadow: `
                   0 0 5px rgba(0, 24, 82, 0.95),
@@ -202,7 +202,8 @@ const StarryLayout = () => {
                 `
               }}
             >
-              Projects
+              <span className="relative z-10">Projects</span>
+              <div className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#10184f] to-[#0d1444] opacity-0 transition-all group-hover:opacity-100"></div>
             </button>
             <button 
               className="px-4 py-2 rounded-lg text-sm tracking-widest font-extralight uppercase text-blue-200/80 transition-all hover:bg-white/[0.05]"
