@@ -1,8 +1,10 @@
 // JellyfishScene.tsx
 import React, { Suspense, useEffect, useRef } from 'react';
-import { Canvas, useFrame, useThree, ThreeElements } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
+
+// Remove the ThreeElements declaration since the types are already defined
 
 type GLTFResult = {
   nodes: { [key: string]: THREE.Mesh };
@@ -34,9 +36,7 @@ function JellyfishModel() {
 
   return (
     <group ref={group}>
-      <mesh>
-        <primitive object={scene} />
-      </mesh>
+      <primitive object={scene} />
     </group>
   );
 }
@@ -50,15 +50,9 @@ function Environment() {
 
   return (
     <>
-      <mesh>
-        <ambientLight intensity={0.4} />
-      </mesh>
-      <mesh>
-        <pointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
-      </mesh>
-      <mesh>
-        <pointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
-      </mesh>
+      <ambientLight intensity={0.4} />
+      <pointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
+      <pointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
     </>
   );
 }
