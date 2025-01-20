@@ -4,8 +4,6 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Remove the ThreeElements declaration since the types are already defined
-
 type GLTFResult = {
   nodes: { [key: string]: THREE.Mesh };
   materials: { [key: string]: THREE.Material };
@@ -14,9 +12,9 @@ type GLTFResult = {
 };
 
 function JellyfishModel() {
-  const Group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF('/jellyfish.glb') as unknown as GLTFResult;
-  const { actions } = useAnimations(animations, Group);
+  const group = useRef<THREE.Group>(null);
+  const { scene, animations } = useGLTF('/jellyfish.glb') as GLTFResult;
+  const { actions } = useAnimations(animations, group);
 
   useEffect(() => {
     Object.values(actions).forEach(action => {
@@ -28,16 +26,16 @@ function JellyfishModel() {
   }, [actions]);
 
   useFrame((state) => {
-    if (Group.current) {
-      Group.current.rotation.y += 0.001;
-      Group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+    if (group.current) {
+      group.current.rotation.y += 0.001;
+      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
   });
 
   return (
-    <Group ref={Group}>
-      <Primitive object={scene} />
-    </Group>
+    <group ref={group}>
+      <primitive object={scene} />
+    </group>
   );
 }
 
@@ -50,9 +48,9 @@ function Environment() {
 
   return (
     <>
-      <AmbientLight intensity={0.4} />
-      <PointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
-      <PointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
+      <ambientLight intensity={0.4} />
+      <pointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
+      <pointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
     </>
   );
 }

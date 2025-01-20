@@ -1,26 +1,21 @@
-// three-jsx.d.ts
-import { ThreeElements } from '@react-three/fiber';
-import { OrbitControls } from '@react-three/drei';
-import * as THREE from 'three';
-
-type ThreeJSX = {
-  orbitControls: JSX.IntrinsicElements['div'] & Parameters<typeof OrbitControls>[0];
-  primitive: JSX.IntrinsicElements['div'] & { object: THREE.Object3D };
-  group: JSX.IntrinsicElements['div'] & { ref?: React.RefObject<THREE.Group> };
-  mesh: JSX.IntrinsicElements['div'] & {
-    geometry?: THREE.BufferGeometry;
-    material?: THREE.Material;
-  };
-  spotLight: JSX.IntrinsicElements['div'] & THREE.SpotLightParameters;
-  ambientLight: JSX.IntrinsicElements['div'] & THREE.AmbientLightParameters;
-  pointLight: JSX.IntrinsicElements['div'] & THREE.PointLightParameters;
-  meshPhysicalMaterial: JSX.IntrinsicElements['div'] & THREE.MeshPhysicalMaterialParameters;
-  meshStandardMaterial: JSX.IntrinsicElements['div'] & THREE.MeshStandardMaterialParameters;
-  directionalLight: JSX.IntrinsicElements['div'] & THREE.DirectionalLightParameters;
-};
+// types/three-jsx.d.ts
+import { Object3DNode, extend } from '@react-three/fiber'
+import { Group, Mesh, SpotLight, PointLight, AmbientLight, DirectionalLight } from 'three'
+import { ThreeElements } from '@react-three/fiber'
 
 declare global {
   namespace JSX {
-    interface IntrinsicElements extends ThreeElements, ThreeJSX {}
+    interface IntrinsicElements extends ThreeElements {}
+  }
+}
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    group: Object3DNode<Group, typeof Group>
+    mesh: Object3DNode<Mesh, typeof Mesh>
+    spotLight: Object3DNode<SpotLight, typeof SpotLight>
+    pointLight: Object3DNode<PointLight, typeof PointLight>
+    ambientLight: Object3DNode<AmbientLight, typeof AmbientLight>
+    directionalLight: Object3DNode<DirectionalLight, typeof DirectionalLight>
   }
 }
