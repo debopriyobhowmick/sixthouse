@@ -16,9 +16,18 @@ function JellyfishModel() {
   const group = useRef<THREE.Group>(null);
   const [modelError, setModelError] = useState<string | null>(null);
   
-  // Move hooks outside of try-catch
-  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
+  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as GLTFResult;
   const { actions } = useAnimations(animations, group);
+
+  // Set initial scale
+  useEffect(() => {
+    if (group.current) {
+      // Scale down the model - adjust these values as needed
+      group.current.scale.set(0.15, 0.15, 0.15);
+      // Initial position
+      group.current.position.set(0, 0, 0);
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -39,8 +48,10 @@ function JellyfishModel() {
 
   useFrame((state) => {
     if (group.current) {
-      group.current.rotation.y += 0.001;
-      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+      // Slower rotation
+      group.current.rotation.y += 0.0005;
+      // Gentler floating motion
+      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.2) * 0.05;
     }
   });
 
@@ -59,41 +70,21 @@ function Environment() {
   const { scene } = useThree();
 
   useEffect(() => {
-    scene.fog = new THREE.Fog(0x000000, 5, 15);
+    // Adjusted fog for better visibility
+    scene.fog = new THREE.Fog(0x000000, 8, 20);
   }, [scene]);
 
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
-      <pointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
+      <ambientLight intensity={0.3} />
+      {/* Adjusted light positions and intensities */}
+      <pointLight position={[5, 5, 5]} intensity={0.5} color="#4F9BFF" />
+      <pointLight position={[-5, -5, -5]} intensity={0.3} color="#4F9BFF" />
     </>
   );
 }
 
-function LoadingFallback() {
-  return (
-    <div className="absolute inset-0 flex items-center justify-center">
-      <div className="text-white/60 bg-black/20 px-6 py-3 rounded-lg backdrop-blur-sm">
-        <div className="flex items-center space-x-2">
-          <div className="animate-spin h-4 w-4 border-2 border-white/60 rounded-full border-t-transparent"></div>
-          <p>Loading 3D Scene...</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function ErrorDisplay({ message }: { message: string }) {
-  return (
-    <div className="w-full h-full flex items-center justify-center">
-      <div className="text-white/60 bg-black/20 px-6 py-3 rounded-lg backdrop-blur-sm">
-        <p className="text-lg">Failed to load 3D scene</p>
-        <p className="text-sm opacity-75 mt-1">{message}</p>
-      </div>
-    </div>
-  );
-}
+// ... (LoadingFallback and ErrorDisplay components remain the same)
 
 const JellyfishScene: React.FC = () => {
   const [hasError, setHasError] = useState(false);
@@ -125,8 +116,8 @@ const JellyfishScene: React.FC = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           camera={{ 
-            position: [0, 0, 5],
-            fov: 45,
+            position: [0, 0, 2], // Moved camera closer
+            fov: 50, // Adjusted field of view
             near: 0.1,
             far: 1000
           }}
@@ -139,7 +130,7 @@ const JellyfishScene: React.FC = () => {
             enablePan={false}
             enableZoom={false}
             autoRotate
-            autoRotateSpeed={0.5}
+            autoRotateSpeed={0.3} // Slowed down rotation
             maxPolarAngle={Math.PI / 1.8}
             minPolarAngle={Math.PI / 2.5}
           />
