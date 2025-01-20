@@ -13,7 +13,7 @@ type GLTFResult = {
 
 function JellyfishModel() {
   const group = useRef<THREE.Group>(null);
-  const { scene, animations } = useGLTF('/jellyfish.glb') as GLTFResult;
+  const { scene, animations } = useGLTF('/jellyfish.glb') as unknown as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {

@@ -1,8 +1,8 @@
+// StarryLayout.tsx
 import React from 'react';
 import { Linkedin, Github } from 'lucide-react';
 import JellyfishScene from './JellyfishScene';
-
-
+import ErrorBoundary from './ErrorBoundary';
 
 const StarryLayout = () => {
   const generateStars = (count: number, isStatic = false) => {
@@ -51,6 +51,7 @@ const StarryLayout = () => {
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
+      {/* Background gradient */}
       <div 
         className="absolute inset-0"
         style={{
@@ -69,6 +70,7 @@ const StarryLayout = () => {
         }}
       />
 
+      {/* Bottom right glow */}
       <div 
         className="absolute bottom-0 right-0 w-80 h-80"
         style={{
@@ -77,11 +79,25 @@ const StarryLayout = () => {
         }}
       />
 
+      {/* Jellyfish Scene with Error Boundary */}
       <div className="absolute inset-0 z-0">
-        <JellyfishScene />
+        <ErrorBoundary
+          fallback={
+            <div className="w-full h-full flex items-center justify-center">
+              <div className="text-white/60 bg-black/20 px-6 py-3 rounded-lg backdrop-blur-sm">
+                <p className="text-lg">Unable to load 3D scene</p>
+                <p className="text-sm opacity-75 mt-1">Please refresh the page to try again</p>
+              </div>
+            </div>
+          }
+        >
+          <JellyfishScene />
+        </ErrorBoundary>
       </div>
 
+      {/* Stars Layer */}
       <div className="absolute inset-0 z-10">
+        {/* Cancer Constellation */}
         {cancerStars.map((star) => (
           <div
             key={star.id}
@@ -106,6 +122,7 @@ const StarryLayout = () => {
           </div>
         ))}
 
+        {/* Orion Constellation */}
         {orionStars.map((star) => (
           <div
             key={star.id}
@@ -130,6 +147,7 @@ const StarryLayout = () => {
           </div>
         ))}
 
+        {/* Static Stars */}
         {staticStars.map((star) => (
           <div
             key={star.id}
@@ -150,6 +168,7 @@ const StarryLayout = () => {
           </div>
         ))}
 
+        {/* Blinking Stars */}
         {blinkingStars.map((star) => (
           <div
             key={star.id}
@@ -179,7 +198,9 @@ const StarryLayout = () => {
         ))}
       </div>
 
+      {/* Navigation and Content */}
       <div className="relative z-20">
+        {/* Navigation Bar */}
         <div className="fixed top-8 right-8">
           <div className="flex gap-4 p-4 rounded-xl bg-white/[0.02] backdrop-blur-[2px] border border-white/[0.05]">
             <button 
@@ -242,38 +263,37 @@ const StarryLayout = () => {
           </div>
         </div>
 
+        {/* Title Section */}
         <div className="fixed top-20 left-8">
           <div className="relative">
-            <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
-                style={{ 
-                  fontStretch: 'expanded',
-                  WebkitTextStroke: '0.5px white'
-                }}>
+            <h1 
+              className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
+              style={{ 
+                fontStretch: 'expanded',
+                WebkitTextStroke: '0.5px white'
+              }}
+            >
               DEBO
             </h1>
             
-            <p className="font-['Optima'] text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
-               style={{
-                 color: 'rgb(191, 219, 254)',
-                 textShadow: `
-                   0 0 5px rgba(0, 24, 82, 0.95),
-                   0 0 8px rgba(0, 24, 82, 0.85),
-                   0 0 12px rgba(13, 36, 95, 0.75)
-                 `
-               }}>
+            <p 
+              className="font-['Optima'] text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
+              style={{
+                color: 'rgb(191, 219, 254)',
+                textShadow: `
+                  0 0 5px rgba(0, 24, 82, 0.95),
+                  0 0 8px rgba(0, 24, 82, 0.85),
+                  0 0 12px rgba(13, 36, 95, 0.75)
+                `
+              }}
+            >
               Full Stack Data Scientist
             </p>
           </div>
         </div>
       </div>
 
-      <style jsx global>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
-      `}</style>
-
+      {/* Footer */}
       <div className="fixed bottom-1 left-0 right-0 text-center z-30">
         <p 
           className="text-[8px] font-['DM_Sans'] text-blue-200/30 tracking-widest"
@@ -287,8 +307,17 @@ const StarryLayout = () => {
           Made with ❤️ in New York City
         </p>
       </div>
+
+      {/* Twinkle Animation */}
+      <style jsx global>{`
+        @keyframes twinkle {
+          0%, 100% { opacity: 0; transform: scale(1); }
+          50% { opacity: 1; transform: scale(1.2); }
+        }
+      `}</style>
     </div>
   );
 };
+
 
 export default StarryLayout;
