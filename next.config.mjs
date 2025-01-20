@@ -7,13 +7,34 @@ const nextConfig = {
     images: {
       unoptimized: true,
     },
-    // Handle GLTF files
     webpack(config) {
       config.module.rules.push({
         test: /\.(glb|gltf)$/,
-        type: 'asset/resource'
+        type: 'asset/resource',
+        generator: {
+          filename: 'static/3d/[name].[hash][ext]'
+        }
       });
+  
       return config;
+    },
+    // Add headers to allow loading 3D models
+    async headers() {
+      return [
+        {
+          source: '/:path*',
+          headers: [
+            {
+              key: 'Cross-Origin-Opener-Policy',
+              value: 'same-origin',
+            },
+            {
+              key: 'Cross-Origin-Embedder-Policy',
+              value: 'require-corp',
+            },
+          ],
+        },
+      ];
     },
   }
   
