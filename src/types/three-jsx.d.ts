@@ -1,13 +1,8 @@
 // types/three-jsx.d.ts
-import { Object3DNode, extend } from '@react-three/fiber'
+import { Object3DNode } from '@react-three/fiber'
 import { Group, Mesh, SpotLight, PointLight, AmbientLight, DirectionalLight } from 'three'
 import { ThreeElements } from '@react-three/fiber'
 
-declare global {
-  namespace JSX {
-    interface IntrinsicElements extends ThreeElements {}
-  }
-}
 
 declare module '@react-three/fiber' {
   interface ThreeElements {
