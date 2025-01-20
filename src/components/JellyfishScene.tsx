@@ -43,7 +43,7 @@ function JellyfishModel() {
   const group = useRef<THREE.Group>(null);
   const [modelError, setModelError] = useState<string | null>(null);
   
-  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as GLTFResult;
+  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as  unknown as GLTFResult;
   const { actions } = useAnimations(animations, group);
 
   useEffect(() => {
