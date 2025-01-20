@@ -1,8 +1,10 @@
 import React from 'react';
 import { Linkedin, Github } from 'lucide-react';
+import JellyfishScene from './JellyfishScene';
+
+
 
 const StarryLayout = () => {
-  // Generate random positions for blinking stars
   const generateStars = (count: number, isStatic = false) => {
     return Array.from({ length: count }, (_, i) => ({
       id: isStatic ? `static-${i}` : `blinking-${i}`,
@@ -16,38 +18,30 @@ const StarryLayout = () => {
   const blinkingStars = generateStars(25);
   const staticStars = generateStars(15, true);
   
-  // Orion constellation stars - rotated 30 degrees clockwise
   const orionStars = [
-    // Primary Stars
-    { id: 'betelgeuse', x: 86, y: 14, name: 'Betelgeuse', primary: true },    // Alpha Orionis
-    { id: 'rigel', x: 89, y: 24, name: 'Rigel', primary: true },              // Beta Orionis
-    { id: 'bellatrix', x: 83, y: 16, name: 'Bellatrix', primary: true },      // Gamma Orionis
-    { id: 'mintaka', x: 88, y: 20, name: 'Mintaka', primary: true },          // Delta Orionis
-    { id: 'alnilam', x: 86, y: 19, name: 'Alnilam', primary: true },          // Epsilon Orionis
-    { id: 'alnitak', x: 84, y: 18, name: 'Alnitak', primary: true },          // Zeta Orionis
-    { id: 'saiph', x: 84, y: 24, name: 'Saiph', primary: true },              // Kappa Orionis
-    { id: 'meissa', x: 85, y: 12, name: 'Meissa', primary: true },            // Lambda Orionis
-    { id: 'tabit', x: 82, y: 17, name: 'Tabit', primary: true },              // Pi3 Orionis
-
-    // Additional Stars
-    { id: 'eta', x: 87, y: 22, name: 'Eta Orionis' },                         // Below belt
-    { id: 'phi', x: 87, y: 17, name: 'Phi Orionis' },                         // Above belt
-    { id: 'omega', x: 85, y: 22, name: 'Omega Orionis' },                     // Below belt
-    { id: 'nu', x: 84, y: 16, name: 'Nu Orionis' },                          // Above belt
-    { id: 'xi', x: 88, y: 16, name: 'Xi Orionis' },                          // Right side
-    { id: 'mu', x: 83, y: 22, name: 'Mu Orionis' },                          // Left side
-    { id: 'chi', x: 86, y: 15, name: 'Chi Orionis' }                         // Upper region
+    { id: 'betelgeuse', x: 86, y: 14, name: 'Betelgeuse', primary: true },
+    { id: 'rigel', x: 89, y: 24, name: 'Rigel', primary: true },
+    { id: 'bellatrix', x: 83, y: 16, name: 'Bellatrix', primary: true },
+    { id: 'mintaka', x: 88, y: 20, name: 'Mintaka', primary: true },
+    { id: 'alnilam', x: 86, y: 19, name: 'Alnilam', primary: true },
+    { id: 'alnitak', x: 84, y: 18, name: 'Alnitak', primary: true },
+    { id: 'saiph', x: 84, y: 24, name: 'Saiph', primary: true },
+    { id: 'meissa', x: 85, y: 12, name: 'Meissa', primary: true },
+    { id: 'tabit', x: 82, y: 17, name: 'Tabit', primary: true },
+    { id: 'eta', x: 87, y: 22, name: 'Eta Orionis' },
+    { id: 'phi', x: 87, y: 17, name: 'Phi Orionis' },
+    { id: 'omega', x: 85, y: 22, name: 'Omega Orionis' },
+    { id: 'nu', x: 84, y: 16, name: 'Nu Orionis' },
+    { id: 'xi', x: 88, y: 16, name: 'Xi Orionis' },
+    { id: 'mu', x: 83, y: 22, name: 'Mu Orionis' },
+    { id: 'chi', x: 86, y: 15, name: 'Chi Orionis' }
   ];
 
-  // Cancer constellation stars
   const cancerStars = [
-    // Main Y-shape
-    { id: 'acubens', x: 15, y: 16, primary: true },      // Alpha Cancri
-    { id: 'altarf', x: 13, y: 18, primary: true },       // Beta Cancri
-    { id: 'asellus-borealis', x: 17, y: 20, primary: true }, // Gamma Cancri
-    { id: 'asellus-australis', x: 15, y: 22, primary: true }, // Delta Cancri
-    
-    // Additional cluster stars
+    { id: 'acubens', x: 15, y: 16, primary: true },
+    { id: 'altarf', x: 13, y: 18, primary: true },
+    { id: 'asellus-borealis', x: 17, y: 20, primary: true },
+    { id: 'asellus-australis', x: 15, y: 22, primary: true },
     { id: 'c-iota', x: 14, y: 17 },
     { id: 'c-chi', x: 16, y: 19 },
     { id: 'c-theta', x: 18, y: 18 },
@@ -57,7 +51,6 @@ const StarryLayout = () => {
 
   return (
     <div className="relative min-h-screen bg-black overflow-hidden">
-      {/* Main circular gradient */}
       <div 
         className="absolute inset-0"
         style={{
@@ -74,20 +67,21 @@ const StarryLayout = () => {
             )
           `,
         }}
-      ></div>
+      />
 
-      {/* Glow effect */}
       <div 
         className="absolute bottom-0 right-0 w-80 h-80"
         style={{
           background: 'radial-gradient(circle at bottom right, rgba(25, 35, 95, 0.3), transparent 60%)',
           filter: 'blur(60px)',
         }}
-      ></div>
+      />
 
-      {/* Stars Container with higher z-index */}
+      <div className="absolute inset-0 z-0">
+        <JellyfishScene />
+      </div>
+
       <div className="absolute inset-0 z-10">
-        {/* Cancer Constellation */}
         {cancerStars.map((star) => (
           <div
             key={star.id}
@@ -112,7 +106,6 @@ const StarryLayout = () => {
           </div>
         ))}
 
-        {/* Orion Constellation */}
         {orionStars.map((star) => (
           <div
             key={star.id}
@@ -137,7 +130,6 @@ const StarryLayout = () => {
           </div>
         ))}
 
-        {/* Static stars */}
         {staticStars.map((star) => (
           <div
             key={star.id}
@@ -158,7 +150,6 @@ const StarryLayout = () => {
           </div>
         ))}
 
-        {/* Blinking stars */}
         {blinkingStars.map((star) => (
           <div
             key={star.id}
@@ -188,9 +179,7 @@ const StarryLayout = () => {
         ))}
       </div>
 
-      {/* Main Content Container */}
       <div className="relative z-20">
-        {/* Navigation Bento Box */}
         <div className="fixed top-8 right-8">
           <div className="flex gap-4 p-4 rounded-xl bg-white/[0.02] backdrop-blur-[2px] border border-white/[0.05]">
             <button 
@@ -253,10 +242,8 @@ const StarryLayout = () => {
           </div>
         </div>
 
-        {/* Header Container - Fixed position in top left */}
         <div className="fixed top-20 left-8">
           <div className="relative">
-            {/* DEBO header */}
             <h1 className="font-['Optima'] text-5xl font-bold tracking-[0.8em] text-white absolute -top-14"
                 style={{ 
                   fontStretch: 'expanded',
@@ -265,7 +252,6 @@ const StarryLayout = () => {
               DEBO
             </h1>
             
-            {/* Role description */}
             <p className="font-['Optima'] text-sm tracking-widest font-extralight uppercase whitespace-nowrap"
                style={{
                  color: 'rgb(191, 219, 254)',
@@ -288,8 +274,7 @@ const StarryLayout = () => {
         }
       `}</style>
 
-      {/* Footer Note */}
-      <div className="fixed bottom-1 left-0 right-0 text-center">
+      <div className="fixed bottom-1 left-0 right-0 text-center z-30">
         <p 
           className="text-[8px] font-['DM_Sans'] text-blue-200/30 tracking-widest"
           style={{
