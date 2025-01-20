@@ -14,13 +14,14 @@ type GLTFResult = {
 
 function JellyfishModel() {
   const group = useRef<THREE.Group>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [modelError, setModelError] = useState<string | null>(null);
   
-  try {
-    const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb')  as GLTFResult;
-    const { actions } = useAnimations(animations, group);
+  // Move hooks outside of try-catch
+  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
+  const { actions } = useAnimations(animations, group);
 
-    useEffect(() => {
+  useEffect(() => {
+    try {
       console.log('Model loaded successfully');
       console.log('Animations available:', animations.length);
       
@@ -30,25 +31,28 @@ function JellyfishModel() {
           action.setLoop(THREE.LoopRepeat, Infinity);
         }
       });
-    }, [actions, animations]);
+    } catch (err) {
+      console.error('Error setting up animations:', err);
+      setModelError(err instanceof Error ? err.message : 'Unknown error in animations');
+    }
+  }, [actions, animations]);
 
-    useFrame((state) => {
-      if (group.current) {
-        group.current.rotation.y += 0.001;
-        group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-      }
-    });
+  useFrame((state) => {
+    if (group.current) {
+      group.current.rotation.y += 0.001;
+      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+    }
+  });
 
-    return (
-      <group ref={group}>
-        <primitive object={scene} />
-      </group>
-    );
-  } catch (err) {
-    console.error('Error loading model:', err);
-    setError(err instanceof Error ? err.message : 'Unknown error loading model');
+  if (modelError) {
     return null;
   }
+
+  return (
+    <group ref={group}>
+      <primitive object={scene} />
+    </group>
+  );
 }
 
 function Environment() {
@@ -80,34 +84,45 @@ function LoadingFallback() {
   );
 }
 
+function ErrorDisplay({ message }: { message: string }) {
+  return (
+    <div className="w-full h-full flex items-center justify-center">
+      <div className="text-white/60 bg-black/20 px-6 py-3 rounded-lg backdrop-blur-sm">
+        <p className="text-lg">Failed to load 3D scene</p>
+        <p className="text-sm opacity-75 mt-1">{message}</p>
+      </div>
+    </div>
+  );
+}
+
 const JellyfishScene: React.FC = () => {
   const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('Please refresh the page to try again');
 
-  const onCanvasError: CanvasProps['onError'] = useCallback((error) => {
+  const onCanvasError: CanvasProps['onError'] = useCallback((error : any) => {
     console.error('Canvas error:', error);
     setHasError(true);
+    setErrorMessage(error.message || 'Canvas error occurred');
   }, []);
 
   useEffect(() => {
     const handleGlobalError = (event: ErrorEvent) => {
       console.error('Global error:', event.error);
       setHasError(true);
+      setErrorMessage(event.error?.message || 'An unexpected error occurred');
     };
 
     window.addEventListener('error', handleGlobalError);
     return () => window.removeEventListener('error', handleGlobalError);
   }, []);
 
+  if (hasError) {
+    return <ErrorDisplay message={errorMessage} />;
+  }
+
   return (
     <div className="absolute inset-0 z-0">
-      {hasError ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="text-white/60 bg-black/20 px-6 py-3 rounded-lg backdrop-blur-sm">
-            <p className="text-lg">Failed to load 3D scene</p>
-            <p className="text-sm opacity-75 mt-1">Please refresh the page to try again</p>
-          </div>
-        </div>
-      ) : (
+      <Suspense fallback={<LoadingFallback />}>
         <Canvas
           camera={{ 
             position: [0, 0, 5],
@@ -118,24 +133,17 @@ const JellyfishScene: React.FC = () => {
           style={{ background: 'transparent' }}
           onError={onCanvasError}
         >
-          <Suspense fallback={null}>
-            <JellyfishModel />
-            <Environment />
-            <OrbitControls 
-              enablePan={false}
-              enableZoom={false}
-              autoRotate
-              autoRotateSpeed={0.5}
-              maxPolarAngle={Math.PI / 1.8}
-              minPolarAngle={Math.PI / 2.5}
-            />
-          </Suspense>
+          <JellyfishModel />
+          <Environment />
+          <OrbitControls 
+            enablePan={false}
+            enableZoom={false}
+            autoRotate
+            autoRotateSpeed={0.5}
+            maxPolarAngle={Math.PI / 1.8}
+            minPolarAngle={Math.PI / 2.5}
+          />
         </Canvas>
-      )}
-
-      {/* Loading overlay */}
-      <Suspense fallback={<LoadingFallback />}>
-        <></>
       </Suspense>
     </div>
   );
@@ -144,8 +152,4 @@ const JellyfishScene: React.FC = () => {
 export default JellyfishScene;
 
 // Preload with error handling
-try {
-  useGLTF.preload('/sixthouse/jellyfish.glb');
-} catch (err) {
-  console.error('Error preloading model:', err);
-}
+useGLTF.preload('/sixthouse/jellyfish.glb');
