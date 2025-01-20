@@ -13,46 +13,41 @@ type GLTFResult = {
 };
 
 function JellyfishModel() {
-    const group = useRef<THREE.Group>(null);
-    const [modelError, setModelError] = useState<string | null>(null);
-    
-    const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
-    const { actions } = useAnimations(animations, group);
+  const group = useRef<THREE.Group>(null);
+  const [modelError, setModelError] = useState<string | null>(null);
   
-    // Set scale
-    useEffect(() => {
-      if (group.current) {
-        group.current.scale.set(0.05, 0.05, 0.05);
-      }
-    }, []);
-  
-    // Play original animation
-    useEffect(() => {
-      try {
-        console.log('Animations available:', animations.length);
-        
-        // Play the first animation (assuming it's the main one from Blender)
-        const animation = Object.values(actions)[0];
-        if (animation) {
-          animation.reset().play();
-          animation.setLoop(THREE.LoopRepeat, Infinity);
-        }
-      } catch (err) {
-        console.error('Error setting up animation:', err);
-        setModelError(err instanceof Error ? err.message : 'Unknown error in animation');
-      }
-    }, [actions, animations]);
-  
-    if (modelError) {
-      return null;
+  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
+  const { actions } = useAnimations(animations, group);
+
+  useEffect(() => {
+    if (group.current) {
+      group.current.scale.set(0.05, 0.05, 0.05);
     }
-  
-    return (
-      <group ref={group}>
-        <primitive object={scene} />
-      </group>
-    );
+  }, []);
+
+  useEffect(() => {
+    try {
+      Object.values(actions).forEach(action => {
+        if (action) {
+          action.play();
+        }
+      });
+    } catch (err) {
+      console.error('Error playing animation:', err);
+      setModelError(err instanceof Error ? err.message : 'Unknown error in animation');
+    }
+  }, [actions]);
+
+  if (modelError) {
+    return null;
   }
+
+  return (
+    <group ref={group}>
+      <primitive object={scene} />
+    </group>
+  );
+}
 
 function Environment() {
   const { scene } = useThree();
@@ -124,7 +119,7 @@ const JellyfishScene: React.FC = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Canvas
           camera={{ 
-            position: [0, 0, 3],  // Changed from 5 to 3
+            position: [0, 0, 3],
             fov: 45,
             near: 0.1,
             far: 1000
@@ -135,12 +130,7 @@ const JellyfishScene: React.FC = () => {
           <JellyfishModel />
           <Environment />
           <OrbitControls 
-            enablePan={false}
-            enableZoom={false}
-            autoRotate
-            autoRotateSpeed={0.5}
-            maxPolarAngle={Math.PI / 1.8}
-            minPolarAngle={Math.PI / 2.5}
+            enabled={false}
           />
         </Canvas>
       </Suspense>
