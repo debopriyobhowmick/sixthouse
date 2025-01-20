@@ -309,12 +309,6 @@ const StarryLayout = () => {
       </div>
 
       {/* Twinkle Animation */}
-      <style jsx global>{`
-        @keyframes twinkle {
-          0%, 100% { opacity: 0; transform: scale(1); }
-          50% { opacity: 1; transform: scale(1.2); }
-        }
-      `}</style>
     </div>
   );
 };
