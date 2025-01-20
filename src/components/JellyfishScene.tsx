@@ -14,9 +14,9 @@ type GLTFResult = {
 };
 
 function JellyfishModel() {
-  const group = useRef<THREE.Group>(null);
+  const Group = useRef<THREE.Group>(null);
   const { scene, animations } = useGLTF('/jellyfish.glb') as unknown as GLTFResult;
-  const { actions } = useAnimations(animations, group);
+  const { actions } = useAnimations(animations, Group);
 
   useEffect(() => {
     Object.values(actions).forEach(action => {
@@ -28,16 +28,16 @@ function JellyfishModel() {
   }, [actions]);
 
   useFrame((state) => {
-    if (group.current) {
-      group.current.rotation.y += 0.001;
-      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
+    if (Group.current) {
+      Group.current.rotation.y += 0.001;
+      Group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
     }
   });
 
   return (
-    <group ref={group}>
-      <primitive object={scene} />
-    </group>
+    <Group ref={Group}>
+      <Primitive object={scene} />
+    </Group>
   );
 }
 
@@ -50,9 +50,9 @@ function Environment() {
 
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <pointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
-      <pointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
+      <AmbientLight intensity={0.4} />
+      <PointLight position={[10, 10, 10]} intensity={0.6} color="#4F9BFF" />
+      <PointLight position={[-10, -10, -10]} intensity={0.4} color="#4F9BFF" />
     </>
   );
 }
