@@ -17,7 +17,7 @@ function JellyfishModel() {
   const [error, setError] = useState<string | null>(null);
   
   try {
-    const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
+    const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb')  as GLTFResult;
     const { actions } = useAnimations(animations, group);
 
     useEffect(() => {
@@ -83,7 +83,7 @@ function LoadingFallback() {
 const JellyfishScene: React.FC = () => {
   const [hasError, setHasError] = useState(false);
 
-  const onCanvasError: CanvasProps['onError'] = useCallback((error : any) => {
+  const onCanvasError: CanvasProps['onError'] = useCallback((error) => {
     console.error('Canvas error:', error);
     setHasError(true);
   }, []);
