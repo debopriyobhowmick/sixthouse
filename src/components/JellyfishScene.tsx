@@ -13,54 +13,46 @@ type GLTFResult = {
 };
 
 function JellyfishModel() {
-  const group = useRef<THREE.Group>(null);
-  const [modelError, setModelError] = useState<string | null>(null);
+    const group = useRef<THREE.Group>(null);
+    const [modelError, setModelError] = useState<string | null>(null);
+    
+    const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
+    const { actions } = useAnimations(animations, group);
   
-  // Move hooks outside of try-catch
-  const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb') as unknown as GLTFResult;
-  const { actions } = useAnimations(animations, group);
-
-  // Add scale effect
-  useEffect(() => {
-    if (group.current) {
-      group.current.scale.set(0.05, 0.05, 0.05);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
-      console.log('Model loaded successfully');
-      console.log('Animations available:', animations.length);
-      
-      Object.values(actions).forEach(action => {
-        if (action) {
-          action.reset().play();
-          action.setLoop(THREE.LoopRepeat, Infinity);
+    // Set scale
+    useEffect(() => {
+      if (group.current) {
+        group.current.scale.set(0.05, 0.05, 0.05);
+      }
+    }, []);
+  
+    // Play original animation
+    useEffect(() => {
+      try {
+        console.log('Animations available:', animations.length);
+        
+        // Play the first animation (assuming it's the main one from Blender)
+        const animation = Object.values(actions)[0];
+        if (animation) {
+          animation.reset().play();
+          animation.setLoop(THREE.LoopRepeat, Infinity);
         }
-      });
-    } catch (err) {
-      console.error('Error setting up animations:', err);
-      setModelError(err instanceof Error ? err.message : 'Unknown error in animations');
+      } catch (err) {
+        console.error('Error setting up animation:', err);
+        setModelError(err instanceof Error ? err.message : 'Unknown error in animation');
+      }
+    }, [actions, animations]);
+  
+    if (modelError) {
+      return null;
     }
-  }, [actions, animations]);
-
-  useFrame((state) => {
-    if (group.current) {
-      group.current.rotation.y += 0.001;
-      group.current.position.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.1;
-    }
-  });
-
-  if (modelError) {
-    return null;
+  
+    return (
+      <group ref={group}>
+        <primitive object={scene} />
+      </group>
+    );
   }
-
-  return (
-    <group ref={group}>
-      <primitive object={scene} />
-    </group>
-  );
-}
 
 function Environment() {
   const { scene } = useThree();
