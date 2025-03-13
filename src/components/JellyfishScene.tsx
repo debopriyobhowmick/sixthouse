@@ -50,29 +50,9 @@ function JellyfishModel() {
       <primitive 
         object={scene} 
         position={[0, 0, 0]}
-        scale={[1, 1, 1]}
+        scale={[0.5, 0.5, 0.5]} // Reduced scale to make the jellyfish smaller
       />
     </group>
-  );
-}
-
-// Debug cube to verify rendering
-function DebugCube() {
-  const cubeRef = useRef<THREE.Mesh>(null);
-  
-  // Add simple rotation animation
-  useFrame(() => {
-    if (cubeRef.current) {
-      cubeRef.current.rotation.x += 0.01;
-      cubeRef.current.rotation.y += 0.01;
-    }
-  });
-  
-  return (
-    <mesh ref={cubeRef} position={[2, 0, 0]}>
-      <boxGeometry args={[0.5, 0.5, 0.5]} />
-      <meshStandardMaterial color="red" />
-    </mesh>
   );
 }
 
@@ -103,7 +83,6 @@ const JellyfishScene: React.FC = () => {
         >
           <color attach="background" args={['#111122']} />
           <JellyfishModel />
-          <DebugCube />
           <Environment />
           <OrbitControls 
             enablePan={true}
