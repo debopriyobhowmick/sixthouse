@@ -1,46 +1,88 @@
-import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, useGLTF } from '@react-three/drei';
+import React, { Suspense, useRef, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
+import { Group } from 'three';
 
 function JellyfishModel() {
+  // Properly type the ref to fix the TypeScript error
+  const group = useRef<Group>(null);
   const { scene, animations } = useGLTF('/sixthouse/jellyfish.glb');
+  const { actions } = useAnimations(animations, group);
+  
+  // Play animations
+  useEffect(() => {
+    if (actions && Object.keys(actions).length > 0) {
+      // Play the first animation found
+      actions[Object.keys(actions)[0]]?.play();
+      console.log('Playing animation:', Object.keys(actions)[0]);
+    } else if (animations && animations.length > 0) {
+      console.log('Model has animations but no actions were created');
+    } else {
+      console.log('No animations found in the model');
+    }
+  }, [actions, animations]);
   
   // Apply white material to all meshes
-  scene.traverse((child) => {
-    if ((child as THREE.Mesh).isMesh) {
-      const mesh = child as THREE.Mesh;
-      if (mesh.material) {
-        if (Array.isArray(mesh.material)) {
-          mesh.material.forEach(mat => {
-            if ((mat as any).color) {
-              (mat as any).color = new THREE.Color(0xffffff);
+  useEffect(() => {
+    scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.material) {
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach(mat => {
+              if ((mat as any).color) {
+                (mat as any).color = new THREE.Color(0xffffff);
+              }
+            });
+          } else {
+            if ((mesh.material as any).color) {
+              (mesh.material as any).color = new THREE.Color(0xffffff);
             }
-          });
-        } else {
-          if ((mesh.material as any).color) {
-            (mesh.material as any).color = new THREE.Color(0xffffff);
           }
         }
       }
-    }
-  });
+    });
+  }, [scene]);
 
   return (
-    <primitive 
-      object={scene} 
-      position={[0, 0, 0]}
-      scale={[1, 1, 1]}
-    />
+    <group ref={group}>
+      <primitive 
+        object={scene} 
+        position={[0, 0, 0]}
+        scale={[1, 1, 1]}
+      />
+    </group>
+  );
+}
+
+// Debug cube to verify rendering
+function DebugCube() {
+  const cubeRef = useRef<THREE.Mesh>(null);
+  
+  // Add simple rotation animation
+  useFrame(() => {
+    if (cubeRef.current) {
+      cubeRef.current.rotation.x += 0.01;
+      cubeRef.current.rotation.y += 0.01;
+    }
+  });
+  
+  return (
+    <mesh ref={cubeRef} position={[2, 0, 0]}>
+      <boxGeometry args={[0.5, 0.5, 0.5]} />
+      <meshStandardMaterial color="red" />
+    </mesh>
   );
 }
 
 function Environment() {
   return (
     <>
-      <ambientLight intensity={0.8} />
+      <ambientLight intensity={1.5} />
       <directionalLight position={[5, 5, 5]} intensity={1} />
       <directionalLight position={[-5, -5, -5]} intensity={0.5} />
+      <pointLight position={[0, 3, 0]} intensity={1} />
     </>
   );
 }
@@ -50,7 +92,7 @@ const JellyfishScene: React.FC = () => {
     <div className="absolute inset-0 z-0">
       <Suspense fallback={
         <div className="absolute inset-0 flex items-center justify-center">
-          <p className="text-white">Loading jellyfish...</p>
+          <p className="text-white">Loading jellyfish model...</p>
         </div>
       }>
         <Canvas
@@ -61,6 +103,7 @@ const JellyfishScene: React.FC = () => {
         >
           <color attach="background" args={['#111122']} />
           <JellyfishModel />
+          <DebugCube />
           <Environment />
           <OrbitControls 
             enablePan={true}
