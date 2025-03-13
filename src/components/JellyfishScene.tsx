@@ -29,65 +29,46 @@ function JellyfishModel() {
   
   const modelPath = '/sixthouse/jellyfish.glb';
   
-  // Use a try-catch block to handle errors during model loading
-  let gltfResult: GLTFResult | null = null;
-  let actions: ReturnType<typeof useAnimations>['actions'] | null = null;
+  // Always call hooks at the top level - React rule of hooks
+  const gltf = useGLTF(modelPath) as unknown as GLTFResult;
+  const { actions } = useAnimations(gltf.animations, group);
   
-  try {
-    // Log attempt to load
-    console.log(`Loading model from: ${modelPath}`);
-    
-    const result = useGLTF(modelPath) as unknown as GLTFResult;
-    gltfResult = result;
-    
-    if (result && group.current) {
-      // Log model details for debugging
-      console.log('Model structure:', {
-        hasScene: !!result.scene,
-        animationCount: result.animations?.length || 0,
-        materialCount: Object.keys(result.materials || {}).length,
-        nodeCount: Object.keys(result.nodes || {}).length
-      });
-      
-      const animResult = useAnimations(result.animations, group);
-      actions = animResult.actions;
-      
-      // Log successful load
-      if (!modelLoaded) {
-        console.log('Animation actions:', Object.keys(animResult.actions));
-        setModelLoaded(true);
-      }
-    }
-  } catch (err) {
-    console.error(`Error loading model from ${modelPath}:`, err);
-    setModelError(err instanceof Error ? err.message : 'Failed to load model');
-    
-    // Return fallback model
-    return <FallbackModel />;
-  }
-  
-  // Set up model with rotation animation as a fallback if the model loads but animations don't work
-  useFrame((state) => {
+  // Set up model with rotation animation as a fallback
+  useFrame((_state) => {
     if (group.current && (!actions || Object.keys(actions).length === 0)) {
-      // Simple rotation animation if the model loads but doesn't have animations
+      // Simple rotation animation if the model doesn't have animations
       group.current.rotation.y += 0.005;
     }
   });
   
-  // Scale model on first render
+  // Safe access to model data with error handling
   useEffect(() => {
-    if (group.current) {
-      group.current.scale.set(0.05, 0.05, 0.05);
-      console.log('Model scaled');
+    try {
+      // Log model details for debugging
+      console.log('Model structure:', {
+        hasScene: !!gltf.scene,
+        animationCount: gltf.animations?.length || 0,
+        materialCount: Object.keys(gltf.materials || {}).length,
+        nodeCount: Object.keys(gltf.nodes || {}).length
+      });
+      
+      // Scale model
+      if (group.current) {
+        group.current.scale.set(0.05, 0.05, 0.05);
+        console.log('Model scaled');
+      }
+      
+      setModelLoaded(true);
+    } catch (err) {
+      console.error(`Error processing model:`, err);
+      setModelError(err instanceof Error ? err.message : 'Failed to process model');
     }
-  }, []);
+  }, [gltf]);
   
   // Play animations when actions are available
   useEffect(() => {
-    if (!actions) return;
-    
     try {
-      console.log('Attempting to play animations:', Object.keys(actions));
+      console.log('Animation actions available:', Object.keys(actions));
       
       if (Object.keys(actions).length === 0) {
         console.warn('No animation actions found in the model');
@@ -112,16 +93,15 @@ function JellyfishModel() {
   }
   
   // Render the model if available
-  if (gltfResult && gltfResult.scene) {
-    return (
-      <group ref={group}>
-        <primitive object={gltfResult.scene} />
-      </group>
-    );
-  }
-  
-  // Fallback if something went wrong but no error was thrown
-  return <FallbackModel />;
+  return (
+    <group ref={group}>
+      {gltf.scene ? (
+        <primitive object={gltf.scene} />
+      ) : (
+        <FallbackModel />
+      )}
+    </group>
+  );
 }
 
 function Environment() {
@@ -175,10 +155,10 @@ const JellyfishScene: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('Please refresh the page to try again');
 
   // Enhanced error handling for the Canvas
-  const onCanvasError: CanvasProps['onError'] = useCallback((error : any) => {
+  const onCanvasError: CanvasProps['onError'] = useCallback((error: unknown) => {
     console.error('Canvas error:', error);
     setHasError(true);
-    setErrorMessage(error.message || 'Canvas error occurred');
+    setErrorMessage(error instanceof Error ? error.message : 'Canvas error occurred');
   }, []);
 
   // Global error handling
