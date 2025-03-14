@@ -50,7 +50,7 @@ function JellyfishModel() {
       <primitive 
         object={scene} 
         position={[0, 0, 0]}
-        scale={[0.15, 0.15, 0.15]} // Further reduced scale to 0.1
+        scale={[0.14, 0.14, 0.14]} // Updated scale to 0.15
       />
     </group>
   );
@@ -81,7 +81,7 @@ const JellyfishScene: React.FC = () => {
             fov: 45
           }}
         >
-          <color attach="background" args={['#111122']} />
+          {/* Remove the background color to allow the gradient to show through */}
           <JellyfishModel />
           <Environment />
           <OrbitControls 
