@@ -50,7 +50,7 @@ function JellyfishModel() {
       <primitive 
         object={scene} 
         position={[0, 0, 0]}
-        scale={[0.5, 0.5, 0.5]} // Reduced scale to make the jellyfish smaller
+        scale={[0.1, 0.1, 0.1]} // Further reduced scale to 0.1
       />
     </group>
   );
